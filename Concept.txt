@@ -1,0 +1,11 @@
+Need to create asp.net mvc application for booking cinema seats.
+
+There are guest and admin pages.
+On guest page you are able to book ticket with next information: date, seat#, you name, email, movie title (can be predifined list)
+On admin page you are able to see the whole list of booked seats, and you as admin are able to delete items.
+
+Requirements:
+Native JS or any JS framework validation on booking page (whatever, name more then 3 symbols, correct email, valid seat#)
+Bookings can be stored in memory and pulled from xml during app initialization.
+
+Если зачешь что-то добавть то пожалуйста, но база должна быть вот такой

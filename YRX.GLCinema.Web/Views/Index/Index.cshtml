@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Movie";
+}
+
+<div class="col-sm-8 b-dashed b-grey b-r">
+    <div data-bind="foreach: Movies">
+        <div><span>#: </span><span data-bind="text: id"></span></div>
+        <div><span>Name: </span><span data-bind="text: name"></span></div>
+        <div><span>Showtime: </span><span data-bind="text: showtime"></span></div>
+        
+        <div class="center-block" data-bind="foreach: rows">
+            <div data-bind="text: $data"></div>
+            <div data-bind="foreach: $root.seats">
+                <!-- ko if: $parent === row() -->
+                <div>
+                    <span>#: </span> <span data-bind="text: id"></span>
+                </div>
+                <div>
+                    <span>row: </span> <span data-bind="text: row"></span>
+                </div>
+                <!-- /ko -->
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-4">
+    @*Backet*@
+</div>
+
+@section scripts {
+    <script>
+
+        var viewModel;
+        $(function() {
+            viewModel = new CinemaApp.Page();
+
+            ko.applyBindings(viewModel);
+
+            $.get("/api/movie",
+                function(items) {
+                    $.each(items,
+                        function(idx, item) {
+                            viewModel.Movies.push(new CinemaApp.Movie(item));
+                        });
+                },
+                "json");
+        });       
+    </script>
+}
+

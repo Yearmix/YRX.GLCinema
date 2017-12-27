@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/knockout-3.4.2.js"></script>
+</head>
+<body>
+<div class="page-container">
+    <div class="header">
+        <div class="center-block">
+            <h3>@ViewBag.Title</h3>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+<script>
+    var CinemaApp = CinemaApp || {};
+
+    CinemaApp.Page = function () {
+        var self = this;
+        self.Backet = new CinemaApp.Backet();
+        self.Movies = ko.observableArray([]);
+    };
+
+    CinemaApp.Backet = function () {
+        var self = this;
+        self.items = ko.observableArray([]);
+    };
+
+    CinemaApp.Ticket = function (ticket) {
+        var self = this;
+        self.id = ticket.Id;
+        self.seat = ticket.Seat;
+        self.price = ticket.Price;
+    };
+
+    CinemaApp.Hall = function (hall) {
+        var self = this;
+        self.id = hall.Id;
+        self.schema = [];
+        $.each(hall.Schema, function (idx, item) {
+            $.each(item, function (jdx, jtem) {
+                self.schema.push(jtem);
+            });
+        });        
+    };
+
+    CinemaApp.Seat = function (seat) {
+        var self = this;
+        self.id = seat.Id;
+        self.row = ko.observable(seat.Row);
+        self.seetnumber = seat.SeetNumber;
+        self.available = ko.observable(seat.Available);
+        self.price = seat.Price;
+    };
+
+    CinemaApp.Movie = function (movie) {
+        var self = this;
+        self.id = movie.Id;
+        self.name = movie.Name;
+        self.showtime = movie.Showtime;
+        self.hallid = movie.HallId;
+        self.rows = [];
+        self.seats = ko.observableArray([]);
+        $.each(movie.Seats, function (idx, item) {
+            self.seats.push(new CinemaApp.Seat(item)); 
+        });
+        $.each(movie.Seats.map(item => item.row).filter((value, index, it) => it.indexOf(value) === index), function (idx, item) {
+            self.rows.push(item);
+        });
+    };
+
+    CinemaApp.Order = function (order) {
+        var self = this;
+        self.id = order.Id;
+        self.customername = order.CustomerName;
+        self.customeremail = order.CustomerEmail;
+        self.ordertotal = order.OrderTotal;
+        self.approved = ko.observable(order.Approved);
+        self.tickets = [];
+        $.each(order.Tickets, function (idx, item) {
+            self.tickets.push(new CinemaApp.Ticket(item));            
+        });
+    };
+</script>
+@RenderSection("scripts", required: false)
+</body>
+</html>

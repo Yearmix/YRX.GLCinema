@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YRX.GLCinema.Web", "YRX.GLCinema.Web\YRX.GLCinema.Web.csproj", "{E25B0548-4BFE-4618-AC7B-F394BA130101}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YRX.GLCinema.DatabaseAccess", "YRX.GLCinema.DatabaseAccess\YRX.GLCinema.DatabaseAccess.csproj", "{C0949195-6563-4BD1-B687-AD8061086AE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{296C4B74-B6D5-47DC-A462-964C5E5DFA40}"
+	ProjectSection(SolutionItems) = preProject
+		Concept.txt = Concept.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YRX.GLCinema.Fulfilment", "YRX.GLCinema.Fulfilment\YRX.GLCinema.Fulfilment.csproj", "{BBCFBEDF-867C-4177-88C6-C529EFBBC89D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E25B0548-4BFE-4618-AC7B-F394BA130101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25B0548-4BFE-4618-AC7B-F394BA130101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25B0548-4BFE-4618-AC7B-F394BA130101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25B0548-4BFE-4618-AC7B-F394BA130101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0949195-6563-4BD1-B687-AD8061086AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0949195-6563-4BD1-B687-AD8061086AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0949195-6563-4BD1-B687-AD8061086AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0949195-6563-4BD1-B687-AD8061086AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBCFBEDF-867C-4177-88C6-C529EFBBC89D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBCFBEDF-867C-4177-88C6-C529EFBBC89D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBCFBEDF-867C-4177-88C6-C529EFBBC89D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBCFBEDF-867C-4177-88C6-C529EFBBC89D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
