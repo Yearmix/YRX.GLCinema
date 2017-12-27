@@ -32,7 +32,7 @@
         <Seat Id="2">
           <Row>1</Row>
           <SeetNumber>2</SeetNumber>
-          <Available>true</Available>
+          <Available>false</Available>
           <Price>55</Price>
         </Seat>
         <Seat Id="3">

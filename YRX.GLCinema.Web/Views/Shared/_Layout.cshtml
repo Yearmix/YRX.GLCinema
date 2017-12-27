@@ -28,6 +28,17 @@
 <script>
     var CinemaApp = CinemaApp || {};
 
+    helpers = {
+        onMouseOver: function(data, event) {
+            var $el = $(event.target);
+            $el.addClass('hovering');       
+        },
+        onMouseLeave: function(data, event) {
+            var $el = $(event.currentTarget);
+            $el.removeClass('hovering');         
+        }   
+    }
+
     CinemaApp.Page = function () {
         var self = this;
         self.Backet = new CinemaApp.Backet();
@@ -37,13 +48,31 @@
     CinemaApp.Backet = function () {
         var self = this;
         self.items = ko.observableArray([]);
+        self.ordertotal = ko.computed(function() {
+            var total = 0;
+            $.each(self.items(), function () { total += this.price; });
+            return total;
+        });
+
+        self.add = function (item) {
+            if (item.available()) {
+                self.items.push(new CinemaApp.Ticket(item));
+            }
+        };
+
+        self.remove = function (item) {
+            self.items.remove(function(p) {
+                 return p.id === item.id;
+            });
+        };
     };
 
-    CinemaApp.Ticket = function (ticket) {
+    CinemaApp.Ticket = function (item) {
         var self = this;
-        self.id = ticket.Id;
-        self.seat = ticket.Seat;
-        self.price = ticket.Price;
+        self.id = item.id;
+        self.row = item.row;
+        self.seetnumber = item.seetnumber;
+        self.price = item.price;
     };
 
     CinemaApp.Hall = function (hall) {

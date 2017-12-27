@@ -14,7 +14,7 @@
             <div class="col-sm-10">
                 <div data-bind="foreach: $parent.seats" class="center-block">
                     <!-- ko if: $parent === row() -->
-                    <div class="seat available" data-bind="attr: { 'id': id }"><span class="noselect" data-bind="text: seetnumber"></span></div>
+                    <div class="seat noselect" data-bind="event: { mouseover: helpers.onMouseOver, mouseout: helpers.onMouseLeave }, text: seetnumber, click: $root.Backet.add, , css: { available : available, unavailable: !available }"></div>
                     <!-- /ko -->
                 </div>
             </div>
@@ -24,18 +24,29 @@
 </div>
 
 <div class="col-sm-4">
-    @*Backet*@
+    <div>Backet: </div>
+    <div>Total: </div><div data-bind='text: Backet.ordertotal'></div>
+    <div data-bind="foreach: Backet.items">
+        <div class="cart_item">
+            <div class="cart_item_data">#</div>
+            <div class="cart_item_data" data-bind="text: $index()+1"></div>
+            <div class="cart_item_data">Row: </div>
+            <div class="cart_item_data" data-bind="text: row"></div>
+            <div class="cart_item_data">Place: </div>
+            <div class="cart_item_data" data-bind="text: seetnumber"></div>
+            <div class="cart_item_data">Price: </div>
+            <div class="cart_item_data" data-bind="text: price"></div>
+            <div class="pull-right glyphicon glyphicon-remove" data-bind="click: $parent.Backet.remove"></div>
+        </div>
+    </div>
 </div>
 
 @section scripts {
     <script>
-
         var viewModel;
         $(function() {
             viewModel = new CinemaApp.Page();
-
             ko.applyBindings(viewModel);
-
             $.get("/api/movie",
                 function(items) {
                     $.each(items,
@@ -44,6 +55,6 @@
                         });
                 },
                 "json");
-        });       
+        });
     </script>
 }
