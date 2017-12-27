@@ -9,12 +9,14 @@
         <div><span>Name: </span><span data-bind="text: name"></span></div>
         <div><span>Showtime: </span><span data-bind="text: showtime"></span></div>
         
-        <div class="center-block" data-bind="foreach: rows">
-            <div data-bind="text: $data"></div>
-            <div class="center-block" data-bind="foreach: $parent.seats">
-                <!-- ko if: $parent === row() -->
-                <span class="seat available" data-bind="text: id"></span>
-                <!-- /ko -->
+        <div data-bind="foreach: rows">
+            <div class="col-sm-1" data-bind="text: $data"></div>
+            <div class="col-sm-10">
+                <div data-bind="foreach: $parent.seats" class="center-block">
+                    <!-- ko if: $parent === row() -->
+                    <div class="seat available"><span class="noselect" data-bind="text: seetnumber"></span></div>
+                    <!-- /ko -->
+                </div>
             </div>
             <div class="clearfix"></div>
         </div>
