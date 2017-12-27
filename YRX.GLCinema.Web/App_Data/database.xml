@@ -2,7 +2,7 @@
 <CinemaDB>
   <Movies>
     <Movie xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Id="2">
-      <Name>Suck my balls</Name>
+      <Name>blah-blah movie</Name>
       <Showtime>2017-12-26T16:07:06.035191+02:00</Showtime>
       <HallId>0</HallId>
       <Ranges>
