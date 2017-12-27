@@ -77,7 +77,7 @@
         $.each(movie.Seats, function (idx, item) {
             self.seats.push(new CinemaApp.Seat(item)); 
         });
-        $.each(movie.Seats.map(item => item.row).filter((value, index, it) => it.indexOf(value) === index), function (idx, item) {
+        $.each(movie.Seats.map(item => item.Row).filter((value, index, it) => it.indexOf(value) === index), function (idx, item) {
             self.rows.push(item);
         });
     };

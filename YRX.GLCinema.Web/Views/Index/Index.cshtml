@@ -11,17 +11,12 @@
         
         <div class="center-block" data-bind="foreach: rows">
             <div data-bind="text: $data"></div>
-            <div data-bind="foreach: $root.seats">
+            <div class="center-block" data-bind="foreach: $parent.seats">
                 <!-- ko if: $parent === row() -->
-                <div>
-                    <span>#: </span> <span data-bind="text: id"></span>
-                </div>
-                <div>
-                    <span>row: </span> <span data-bind="text: row"></span>
-                </div>
+                <span class="seat available" data-bind="text: id"></span>
                 <!-- /ko -->
             </div>
-            <hr />
+            <div class="clearfix"></div>
         </div>
     </div>
 </div>
