@@ -95,12 +95,16 @@ textarea {
     border: solid 2px #007acb;
 }
 
+.seat:disabled {
+    background-color: #9e9e9e !important;
+}
+
 .unavailable {
     border: solid 2px #9e9e9e;
 }
 
-.available .hovering {
-    background-color: #007acb;
+.available:hover {
+    background-color: #007acb ;
 }
 
 .available .selected {
