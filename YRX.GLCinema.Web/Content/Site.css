@@ -87,29 +87,36 @@ textarea {
     font-size: 12px;
     text-align: center;
     vertical-align: middle;
+    background-color: #9e9e9e;
+    border: solid 2px #9e9e9e;
 }
 
 .clearfix { clear: both;}
 
 .available {
     border: solid 2px #007acb;
+    background-color: transparent;
+    cursor: pointer;
 }
 
-.seat:disabled {
-    background-color: #9e9e9e !important;
+.pointer {
+    cursor: pointer;
 }
 
-.unavailable {
-    border: solid 2px #9e9e9e;
-}
-
-.available:hover {
-    background-color: #007acb ;
-}
-
-.available .selected {
+.selected {
+    border: solid 2px red;
     background-color: red;
 }
+
+    .selected:hover {
+        background-color: red !important;
+    }
+
+.available:hover {
+    background-color: #007acb;
+}
+
+
 
 .cart_item {
     background: #2d2d30;

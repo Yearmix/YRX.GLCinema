@@ -54,16 +54,27 @@
             return total;
         });
 
-        self.add = function (item) {
+        self.add = function (item, event) {
             if (item.available()) {
-                self.items.push(new CinemaApp.Ticket(item));
+                //var $el = $(event.target);
+                if ($.grep(self.items(), function (p) { return p.id === item.id; }).length > 0) {
+                    //$el.removeClass('selected');
+                    self.items.remove(function (p) { return p.id === item.id; });
+                }
+                else{
+                    self.items.push(new CinemaApp.Ticket(item));
+                    //$el.addClass('selected');
+                }
             }
         };
 
-        self.remove = function (item) {
+        self.remove = function (item, event) {
             self.items.remove(function(p) {
-                 return p.id === item.id;
+                return p.id === item.id;
             });
+            //var $el = $(event.target);
+            //$el.removeClass('selected');
+            
         };
     };
 
@@ -93,6 +104,27 @@
         self.seetnumber = seat.SeetNumber;
         self.available = ko.observable(seat.Available);
         self.price = seat.Price;
+
+        self.onMouseOver = function(data, event) {
+            var $el = $(event.target);
+            $el.addClass('hover');
+        };
+        self.onMouseLeave = function(data, event) {
+            var $el = $(event.target);
+            $el.removeClass('hover');
+        };
+
+        self.onSelect = function (data, event) {
+            var $el = $(event.target);
+            if ($el.hasClass("selected")) {
+                $(this).removeClass("selected"); 
+            }
+            else {
+                $(this).addClass("selected");
+            }
+        };
+
+
     };
 
     CinemaApp.Movie = function (movie) {

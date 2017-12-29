@@ -14,7 +14,7 @@
             <div class="col-sm-10">
                 <div data-bind="foreach: $parent.seats" class="center-block">
                     <!-- ko if: $parent === row() -->
-                    <div class="seat noselect" data-bind="event: { mouseover: helpers.onMouseOver, mouseout: helpers.onMouseLeave }, text: seetnumber, click: $root.Backet.add, , css: { available : available, unavailable: !available }"></div>
+                    <div class="seat noselect" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseLeave, mouseup: onSelect }, text: seetnumber, click: $root.Backet.add, css: { available : available }"></div>
                     <!-- /ko -->
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="cart_item_data" data-bind="text: seetnumber"></div>
             <div class="cart_item_data">Price: </div>
             <div class="cart_item_data" data-bind="text: price"></div>
-            <div class="pull-right glyphicon glyphicon-remove" data-bind="click: $parent.Backet.remove"></div>
+            <div class="pull-right glyphicon glyphicon-remove pointer" data-bind="click: $parent.Backet.remove"></div>
         </div>
     </div>
 </div>
