@@ -54,12 +54,12 @@
             return total;
         });
 
-        self.add = function (item, event) {
+        self.add = function (item) {
             if (item.available()) {
                 //var $el = $(event.target);
-                if ($.grep(self.items(), function (p) { return p.id === item.id; }).length > 0) {
+                if ($.grep(self.items(), function () { return this.id === item.id; }).length > 0) {
                     //$el.removeClass('selected');
-                    self.items.remove(function (p) { return p.id === item.id; });
+                    self.items.remove(function () { return this.id === item.id; });
                 }
                 else{
                     self.items.push(new CinemaApp.Ticket(item));
@@ -68,9 +68,9 @@
             }
         };
 
-        self.remove = function (item, event) {
-            self.items.remove(function(p) {
-                return p.id === item.id;
+        self.remove = function (item) {
+            self.items.remove(function() {
+                return this.id === item.id;
             });
             //var $el = $(event.target);
             //$el.removeClass('selected');
@@ -103,7 +103,9 @@
         self.row = ko.observable(seat.Row);
         self.seetnumber = seat.SeetNumber;
         self.available = ko.observable(seat.Available);
+        self.selected = ko.observable(false);
         self.price = seat.Price;
+
 
         self.onMouseOver = function(data, event) {
             var $el = $(event.target);
@@ -114,14 +116,21 @@
             $el.removeClass('hover');
         };
 
-        self.onSelect = function (data, event) {
+        self.onClick = function (data, event) {
             var $el = $(event.target);
-            if ($el.hasClass("selected")) {
-                $(this).removeClass("selected"); 
-            }
-            else {
-                $(this).addClass("selected");
-            }
+            if (self.available())
+            {
+                if (self.selected) {
+                    viewModel.Backet.remove(data)
+                    self.selected = false;
+                    $el.removeClass("selected");
+                }
+                else {
+                    viewModel.Backet.add(data)
+                    self.selected = true;
+                    $(this).addClass("selected");
+                }
+            }           
         };
 
 
