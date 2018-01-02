@@ -1,48 +1,220 @@
 ﻿
 @{
-    ViewBag.Title = "Movie";
+    ViewBag.Title = "Movies";
 }
+
+<div class="col-sm">
+    <div class="alert alert-danger" data-bind="visible:Backet.error().length, foreach : Backet.error">
+        <div data-bind="text: $data"></div>
+    </div>
+    <div class="alert alert-success" data-bind="visible:Backet.succsess().length, foreach : Backet.succsess">
+        <div data-bind="text: $data"></div>
+    </div>   
+</div>
 
 <div class="col-sm-8 b-dashed b-grey b-r">
     <div data-bind="foreach: Movies">
-        <div><span>#: </span><span data-bind="text: id"></span></div>
-        <div><span>Name: </span><span data-bind="text: name"></span></div>
-        <div><span>Showtime: </span><span data-bind="text: showtime"></span></div>
-        
-        <div data-bind="foreach: rows">
-            <div class="col-sm-1" data-bind="text: $data"></div>
-            <div class="col-sm-10">
-                <div data-bind="foreach: $parent.seats" class="center-block">
-                    <!-- ko if: $parent === row() -->
-                    <div class="seat noselect" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseLeave }, text: seetnumber, click: onClick , css: { available : available }"></div>
-                    <!-- /ko -->
-                </div>
-            </div>
-            <div class="clearfix"></div>
+        <div class="movie">
+            <div><span>#: </span><span data-bind="text: id"></span></div>
+            <div><span>Name: </span><span data-bind="text: name"></span></div>
+            <div><span>Showtime: </span><span data-bind="text: showtime"></span></div>
         </div>
-    </div>
+        <div class="movie">
+            <div data-bind="foreach: rows">                
+                <div class="movie-row">
+                    <div class="pull-left movie-row-count" data-bind="text: $data"></div>
+                    <div data-bind="foreach: $parent.seats" class="pull-right">
+                        <!-- ko if: $parent === row -->
+                        <div class="seat noselect" data-bind="event: { mouseover: onMouseOver, mouseout: onMouseLeave }, text: seetnumber, click: onClick.bind($data, $parentContext.$parentContext.$data.id), css: { available : available }"></div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>    
 </div>
 
 <div class="col-sm-4">
-    <div>Backet: </div>
-    <div>Total: </div><div data-bind='text: Backet.ordertotal'></div>
+    <div class="cart-item" data-bind='visible:Backet.items().length'>
+        <div><h2 class="glyphicon glyphicon-shopping-cart"></h2><div class="pull-right"><h3>Total : <strong data-bind='text: Backet.ordertotal'></strong> $</h3></div></div>
+        
+    </div>
+    <div class="cart-item" data-bind='visible:Backet.items().length'>
+        <input type="text" data-bind="value: Backet.username, valueUpdate: "afterkeydown", css: { error: Backet.username.hasError }" class="form-input first" placeholder="Username" />
+        <input type="email" data-bind="value: Backet.email, valueUpdate: "afterkeydown", css: { error: Backet.email.hasError }" class="form-input last" placeholder="Email" />
+
+        <button type="button" class="form-input button" data-bind='click: Backet.placeorder'>Place order</button>
+    </div>
     <div data-bind="foreach: Backet.items">
-        <div class="cart_item">
-            <div class="cart_item_data">#</div>
-            <div class="cart_item_data" data-bind="text: $index()+1"></div>
-            <div class="cart_item_data">Row: </div>
-            <div class="cart_item_data" data-bind="text: row"></div>
-            <div class="cart_item_data">Place: </div>
-            <div class="cart_item_data" data-bind="text: seetnumber"></div>
-            <div class="cart_item_data">Price: </div>
-            <div class="cart_item_data" data-bind="text: price"></div>
-            <div class="pull-right glyphicon glyphicon-remove pointer" data-bind="click: $parent.Backet.remove"></div>
+        <div class="cart-item">
+            <div class="cart-item-data"><span class="top"># </span><p class="bottom">  <strong data-bind="text: $index()+1"></strong></p></div>
+            <div class="cart-item-data"><span class="top">Row  </span><p class="bottom"><strong data-bind="text: row"></strong></p></div>
+            <div class="cart-item-data"><span class="top">Place  </span><p class="bottom"><strong data-bind="text: seetnumber"></strong></p></div>
+            <div class="cart-item-data"><span class="top">Price  </span><p  class="bottom"><strong data-bind="text: price"></strong><span> $</span></p></div>            
         </div>
     </div>
 </div>
 
 @section scripts {
     <script>
+
+        CinemaApp.Page = function () {
+            var self = this;
+            self.Backet = new CinemaApp.Backet();
+            self.Movies = ko.observableArray([]);
+        };
+
+        CinemaApp.Backet = function () {
+            var self = this;
+            self.items = ko.observableArray([]);
+            self.username = ko.observable();
+            self.email = ko.observable();
+            self.succsess = ko.observableArray([]);
+            self.error = ko.observableArray([]);
+
+            self.ordertotal = ko.computed(function () {
+                var total = 0;
+                $.each(self.items(), function () { total += this.price; });
+                return total;
+            });
+
+            self.add = function (movieid, item) {
+                if (item.available()) {
+                    if ($.grep(self.items(), function (a) { return a.id === item.id && a.movieid === movieid; }).length > 0) {
+                        self.items.remove(function (a) { return a.id === item.id && a.movieid === movieid; });
+                    }
+                    else {
+                        self.items.push(new CinemaApp.Ticket(movieid, item));
+                    }
+                }
+            };
+
+            self.remove = function (movieid, item) {
+                self.items.remove(function (a) {
+                    return a.id === item.id && a.movieid === movieid;
+                });
+                if (!self.items().length) {
+                    self.error.removeAll();
+                }
+            };
+
+            self.placeorder = function () {
+                self.error.removeAll();
+                var regEmail = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!self.email() || !regEmail.test(self.email().toLowerCase())) {
+                    self.error.push("Please enter valid email")
+                }
+                if (!self.username() || !self.username().length > 3) {
+                    self.error.push("Please enter user name")
+                }
+                if (self.error().length) {
+                    return false;
+                }
+
+                var data = { CustomerName: self.username(), CustomerEmail: self.email(), OrderTotal: self.ordertotal() };
+                data.Tickets = [];
+                $.each(self.items(), function (idx, item) {
+                    data.Tickets.push(item);
+                });
+
+                $.ajax({
+                    url: "/api/order",
+                    data: JSON.stringify(data),
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).done(function (items) {
+                    $.each(items,
+                        function (idx, item) {
+                            viewModel.Movies.remove(function (a) { return a.id === item.Id });
+                            viewModel.Movies.push(new CinemaApp.Movie(item));
+                        });
+                    self.items.removeAll();
+                    setTimeout(function () {
+                        self.succsess.removeAll();
+                    }, 4000);
+                    self.succsess.push("Your order has been placed!");
+                },
+                    "json").error(function (data) {
+                        self.error.push("Your order is invalid!");
+                        setTimeout(function () {
+                            self.error.removeAll();
+                        }, 4000);
+                    });
+            }
+        };
+
+        CinemaApp.Ticket = function (movieid, item) {
+            var self = this;
+            self.id = item.id;
+            self.movieid = movieid
+            self.row = item.row;
+            self.seetnumber = item.seetnumber;
+            self.price = item.price;
+        };
+
+        CinemaApp.Hall = function (hall) {
+            var self = this;
+            self.id = hall.Id;
+            self.schema = [];
+            $.each(hall.Schema, function (idx, item) {
+                $.each(item, function (jdx, jtem) {
+                    self.schema.push(jtem);
+                });
+            });
+        };
+
+        CinemaApp.Seat = function (seat) {
+            var self = this;
+            self.id = seat.Id;
+            self.row = seat.Row;
+            self.seetnumber = seat.SeetNumber;
+            self.available = ko.observable(seat.Available);
+            self.price = seat.Price;
+
+            self.onMouseOver = function (data, event) {
+                var $el = $(event.target);
+                $el.addClass('hover');
+            };
+            self.onMouseLeave = function (data, event) {
+                var $el = $(event.target);
+                $el.removeClass('hover');
+            };
+
+            self.onClick = function (id, data, event) {
+                var $el = $(event.target);
+                if (self.available()) {
+                    if ($el.hasClass('selected')) {
+                        viewModel.Backet.remove(id, data)
+                        self.selected = false;
+                        $el.removeClass('selected');
+                    }
+                    else {
+                        viewModel.Backet.add(id, data)
+                        self.selected = true;
+                        $el.addClass('selected');
+                    }
+                }
+            };
+        };
+
+        CinemaApp.Movie = function (movie) {
+            var self = this;
+            self.id = movie.Id;
+            self.name = movie.Name;
+            self.showtime = movie.Showtime;
+            self.hallid = movie.HallId;
+            self.rows = [];
+            self.seats = ko.observableArray([]);
+            $.each(movie.Seats, function (idx, item) {
+                self.seats.push(new CinemaApp.Seat(item));
+            });
+            $.each(movie.Seats.map(item => item.Row).filter((value, index, it) => it.indexOf(value) === index), function (idx, item) {
+                self.rows.push(item);
+            });
+        };       
+
         var viewModel;
         $(function() {
             viewModel = new CinemaApp.Page();

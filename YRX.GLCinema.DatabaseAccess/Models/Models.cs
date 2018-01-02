@@ -2,11 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 
 namespace YRX.GLCinema.DatabaseAccess
@@ -25,6 +21,12 @@ namespace YRX.GLCinema.DatabaseAccess
         }
     }
 
+    public class Approval
+    {
+        public int Id { get; set; }
+        public bool Approved { get; set; }
+    }
+
     public class Seat : Entity
     {
         public int Row { get; set; }
@@ -40,15 +42,19 @@ namespace YRX.GLCinema.DatabaseAccess
     {
         public int MovieId { get; set; }
 
-        public int Seat { get; set; }
+        public int Row { get; set; }
+
+        public int SeetNumber { get; set; }
 
 		public double Price {get;set;}		
     }
 
     public class Order : Entity
     {
+        [Required]
         public string CustomerName { get; set; }
 
+        [Required]
         public string CustomerEmail { get; set; }
 
         public double OrderTotal { get; set; }

@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Admin";
+}
+
+<div class="col-sm">
+    <div class="alert alert-danger" data-bind="visible: Admin.error().length, foreach : Admin.error">
+        <div data-bind="text: $data"></div>
+    </div>    
+</div>
+
+<div class="col-sm">
+    <div class="row b-t-r-b-l b-solid b-grey">
+        <div class="col-sm-1">Id</div>
+        <div class="col-sm-2">Customer Name</div>
+        <div class="col-sm-2">Customer Email</div>
+        <div class="col-sm-2">OrderTotal</div>
+        <div class="col-sm-1">Approved</div>
+        <div class="col-sm-4">Edit</div>
+    </div>
+    <div data-bind="foreach: Orders">
+        <div class="row b-t-r-b-l b-solid b-grey">
+            <div class="col-sm-1" data-bind="text: id"></div>
+            <div class="col-sm-2" data-bind="text: customername">Customer Name</div>
+            <div class="col-sm-2" data-bind="text: customeremail">Customer Email</div>
+            <div class="col-sm-2" data-bind="text: ordertotal">OrderTotal</div>
+            <div class="col-sm-1" data-bind="text: approved">Approved</div>
+            <div class="col-sm-4">
+                <button class="btn btn-success" type="button" data-bind='click: $parent.Admin.approve.bind($data, true), disable: approved()'>Accept</button>
+                <button class="btn btn-danger" type="button" data-bind='click: $parent.Admin.approve.bind($data, false), disable: !approved()'>Reject</button>
+            </div>
+        </div>
+    </div>    
+</div>
+
+@section scripts {
+    <script>
+        CinemaApp.AdminPage = function () {
+            var self = this;
+            self.Orders = ko.observableArray([]);
+            self.Admin = new CinemaApp.Admin();
+        };
+
+        CinemaApp.Admin = function () {
+            var self = this;
+            self.error = ko.observableArray([]);
+
+            self.approve = function (approve,item) {
+                var data = { id: item.id, approved: approve };               
+
+                $.ajax({
+                    url: "/api/order/" + data.id,
+                    data: JSON.stringify(data),
+                    type: "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).done(function (item) {
+                    viewModel.Orders.remove(function (a) { return a.id === item.Id; });
+                    viewModel.Orders.push(new CinemaApp.Order(item));                    
+                }, "json").error(function (data) {
+                    self.error.push("Oops something had happen!" + data);
+                    setTimeout(function () {
+                        self.error.removeAll();
+                    }, 4000);
+                });
+            }; 
+        };
+
+        CinemaApp.Order = function (order) {
+            var self = this;
+            self.id = order.Id;
+            self.customername = order.CustomerName;
+            self.customeremail = order.CustomerEmail;
+            self.ordertotal = order.OrderTotal;
+            self.approved = ko.observable(order.Approved);
+            self.tickets = [];
+            $.each(order.Tickets, function (idx, item) {
+                self.tickets.push(new CinemaApp.Ticket(item));
+            });
+        };
+
+        CinemaApp.Ticket = function (item) {
+            var self = this;
+            self.id = item.Id;
+            self.movieid = item.MovieId
+            self.row = item.Row;
+            self.seetnumber = item.SeetNumber;
+            self.price = item.Price;
+        };
+
+        var viewModel;
+        $(function () {
+            viewModel = new CinemaApp.AdminPage();
+            ko.applyBindings(viewModel);
+            $.get("/api/order", function (items) {
+                $.each(items, function (idx, item) {
+                    viewModel.Orders.push(new CinemaApp.Order(item));
+                });
+            }, "json");
+        });
+    </script>
+}
+
+

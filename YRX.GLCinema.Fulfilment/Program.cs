@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using YRX.GLCinema.DatabaseAccess;
 using YRX.GLCinema.DatabaseAccess.Repositories;
 
@@ -59,7 +55,6 @@ namespace YRX.GLCinema.Fulfilment
             }
         }
 
-
         public static void PopulateTestHall()
         {
             var hallRepository = new XmlRepository<Hall>();
@@ -73,7 +68,6 @@ namespace YRX.GLCinema.Fulfilment
 
             hallRepository.Delete(hall.Id);
         }
-
         public static void PopulateTestOrder()
         {
             var orderRepository = new XmlRepository<Order>();
@@ -84,9 +78,9 @@ namespace YRX.GLCinema.Fulfilment
                 Approved = true,
                 Tickets = new List<Ticket>()
                 {
-                    new Ticket() {Id = 1, MovieId = 2, Seat = 3},
-                    new Ticket() {Id = 2, MovieId = 2, Seat = 4},
-                    new Ticket() {Id = 2, MovieId = 2, Seat = 5}
+                    new Ticket() {Id = 1, MovieId = 2, Row = 1, SeetNumber = 1},
+                    new Ticket() {Id = 2, MovieId = 2, Row = 4, SeetNumber = 4},
+                    new Ticket() {Id = 3, MovieId = 2, Row = 5, SeetNumber = 5}
                 },
                 CustomerEmail = "name@domain.com",
                 CustomerName = "John Dou",
@@ -101,9 +95,9 @@ namespace YRX.GLCinema.Fulfilment
                 Approved = true,
                 Tickets = new List<Ticket>()
                 {
-                    new Ticket() {Id = 1, MovieId = 2, Seat = 37},
-                    new Ticket() {Id = 2, MovieId = 2, Seat = 87},
-                    new Ticket() {Id = 2, MovieId = 2, Seat = 45}
+                    new Ticket() {Id = 1, MovieId = 2, Row = 6, SeetNumber = 1},
+                    new Ticket() {Id = 2, MovieId = 2, Row = 7, SeetNumber = 3},
+                    new Ticket() {Id = 3, MovieId = 2, Row = 8, SeetNumber = 5}
                 },
                 CustomerEmail = "name@domain.com",
                 CustomerName = "John Dou",
@@ -114,7 +108,6 @@ namespace YRX.GLCinema.Fulfilment
 
             orderRepository.Delete(order.Id);
         }
-
         public static void PopulateTestMovie()
         {
             var movieRepository = new XmlRepository<Movie>();
@@ -136,7 +129,6 @@ namespace YRX.GLCinema.Fulfilment
 
             movieRepository.Delete(movie.Id);
         }
-
         public static void PopulateTestTicket()
         {
             var ticketRepository = new XmlRepository<Ticket>();
@@ -144,19 +136,18 @@ namespace YRX.GLCinema.Fulfilment
             var ticket = new Ticket();
             ticket.Id = 1;
             ticket.MovieId = 2;
-            ticket.Seat = 3;
+            ticket.SeetNumber = 3;
         
             ticketRepository.Add(ticket);
 
             var ticket1 = new Ticket();
             ticket1.Id = 2;
             ticket1.MovieId = 2;
-            ticket1.Seat = 3;
+            ticket1.SeetNumber = 3;
 
             ticketRepository.Add(ticket1);
 
             ticketRepository.Delete(ticket.Id);
         }
-
     }
 }

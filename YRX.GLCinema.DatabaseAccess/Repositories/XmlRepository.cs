@@ -4,8 +4,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -31,6 +29,7 @@ namespace YRX.GLCinema.DatabaseAccess.Repositories
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
+            entity.Id = Items.Count() != Items.OrderBy(x => x.Id).LastOrDefault().Id ? Items.OrderBy(x => x.Id).LastOrDefault().Id + 1 : Items.Count() + 1;
             _dbSet.Add(entity);
         }
 
