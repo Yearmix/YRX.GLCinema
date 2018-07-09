@@ -1,3 +1,3 @@
 # YRX.GLCinema
 
-GL test task, PoC of fleximple cinema theatre from flat file, MVVM ready 
+GL test task, PoC of flexible cinema theatre from flat file, MVVM ready 
